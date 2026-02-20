@@ -55,7 +55,15 @@ export default function EndingScreen({ ending, onRestart, onMainMenu }: EndingSc
   };
 
   return (
-    <div className={`fixed inset-0 flex items-center justify-center z-50 ${getEndingClass()}`}>
+    <div
+      className={`fixed inset-0 flex items-center justify-center z-50 ${getEndingClass()}`}
+      style={{
+        paddingTop: 'env(safe-area-inset-top, 0)',
+        paddingBottom: 'env(safe-area-inset-bottom, 0)',
+        paddingLeft: 'env(safe-area-inset-left, 0)',
+        paddingRight: 'env(safe-area-inset-right, 0)'
+      }}
+    >
       {/* 粒子效果 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {endingData.type === 'good' && (
@@ -85,8 +93,11 @@ export default function EndingScreen({ ending, onRestart, onMainMenu }: EndingSc
           <div className="h-px w-16 bg-gradient-to-l from-transparent to-current opacity-30" />
         </div>
 
-        {/* 结局标题 */}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 font-title">
+        {/* 结局标题 - Fluid typography */}
+        <h1
+          className="font-bold text-white mb-8 font-title"
+          style={{ fontSize: 'clamp(1.5rem, 6vw, 3rem)' }}
+        >
           &ldquo;{endingData.title}&rdquo;
         </h1>
 

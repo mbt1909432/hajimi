@@ -185,13 +185,15 @@ const ActionButton = memo(function ActionButton({
       ref={buttonRef}
       onClick={handleClick}
       disabled={disabled}
+      aria-label={`${interaction.displayName}${onCooldown ? ` 冷却中 ${remaining}秒` : ''}`}
       className={`
         relative overflow-hidden
         flex flex-col items-center justify-center
-        py-3 px-2 min-h-[52px]
+        py-3 px-2 min-h-[52px] min-w-[44px]
         rounded-xl
         transition-all duration-150 ease-out
         select-none
+        touch-manipulation
         ${disabled
           ? 'opacity-40 cursor-not-allowed grayscale-[30%]'
           : 'cursor-pointer hover:-translate-y-0.5 active:translate-y-0'

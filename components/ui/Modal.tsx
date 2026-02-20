@@ -43,10 +43,14 @@ export default function Modal({ isOpen, onClose, children, title }: ModalProps) 
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center z-50"
+      className="fixed inset-0 flex items-center justify-center z-50 p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby={title ? 'modal-title' : undefined}
+      style={{
+        paddingTop: 'max(16px, env(safe-area-inset-top, 16px))',
+        paddingBottom: 'max(16px, env(safe-area-inset-bottom, 16px))'
+      }}
     >
       {/* 背景遮罩 */}
       <div

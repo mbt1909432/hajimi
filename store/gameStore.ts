@@ -10,12 +10,16 @@ import type {
   EventChoice,
   EndingType,
   InteractionRecord,
-  TimeOfDay
+  TimeOfDay,
+  InventoryItem,
+  DiaryEntry
 } from '@/types/game';
 import { applyInteraction, checkEndings, getNextTimeOfDay, applyDailyChanges } from '@/lib/gameLogic';
 import { interactions, isInteractionAvailable } from '@/lib/interactions';
+import { generateDiaryEntry } from '@/lib/diary';
+import { getRandomEvent } from '@/lib/events';
 
-// 初始猫咪状态 - 希尔薇风格（有创伤的初始状态）
+// 初始角色状态 - 兽娘（有创伤的初始状态）
 const initialCatState: CatState = {
   affection: 10,     // 低好感度
   corruption: 5,     // 初始堕落度
@@ -58,6 +62,15 @@ const initialCooldowns: Record<InteractionType, number> = {
   release: 0, adoptOut: 0
 };
 
+// 初始背包
+const initialInventory: InventoryItem[] = [];
+
+// 初始日记
+const initialDiary: DiaryEntry[] = [];
+
+// 初始资源
+const initialCoins = 100;
+
 // 初始游戏状态
 const initialState: GameState = {
   cat: initialCatState,
@@ -74,10 +87,22 @@ const initialState: GameState = {
     textSpeed: 'normal',
     autoPlayDelay: 2000,
     showAffectionChange: true
-  }
+  },
+  // 特殊物品状态
+  hasDiary: false,
+  hasPhoto: false,
+  hasCollar: false
 };
 
-interface GameStore extends GameState {
+// 扩展的游戏状态
+interface ExtendedGameState extends GameState {
+  inventory: InventoryItem[];
+  diary: DiaryEntry[];
+  coins: number;
+  todayInteractions: InteractionType[];
+}
+
+interface GameStore extends ExtendedGameState {
   // 互动
   interact: (type: InteractionType) => { success: boolean; message?: string };
 
@@ -95,12 +120,30 @@ interface GameStore extends GameState {
 
   // 设置
   updateSettings: (settings: Partial<GameState['settings']>) => void;
+
+  // 物品系统
+  addItem: (itemId: string, quantity?: number) => void;
+  removeItem: (itemId: string, quantity?: number) => boolean;
+  useItem: (itemId: string) => { success: boolean; message?: string };
+
+  // 商店
+  buyItem: (itemId: string) => { success: boolean; message?: string };
+
+  // 日记系统
+  addDiaryEntry: () => void;
+
+  // 资源
+  addCoins: (amount: number) => void;
 }
 
 export const useGameStore = create<GameStore>()(
   persist(
     (set, get) => ({
       ...initialState,
+      inventory: initialInventory,
+      diary: initialDiary,
+      coins: initialCoins,
+      todayInteractions: [],
 
       interact: (type: InteractionType) => {
         const state = get();
@@ -169,8 +212,15 @@ export const useGameStore = create<GameStore>()(
           cooldowns: {
             ...state.cooldowns,
             [type]: now + interaction.cooldown * 1000
-          }
+          },
+          todayInteractions: [...state.todayInteractions, type]
         });
+
+        // 特殊处理：放生互动直接触发 released 结局
+        if (type === 'release') {
+          set({ isEnded: true, ending: 'released' });
+          return { success: true };
+        }
 
         // 检查结局
         const ending = checkEndings(newState, newStats);
@@ -225,10 +275,14 @@ export const useGameStore = create<GameStore>()(
           newCat.isSleeping = false;
         }
 
+        // 检查是否触发随机事件
+        const event = getRandomEvent(newCat, newStats);
+
         set({
           time: newTime,
           cat: newCat,
-          stats: newStats
+          stats: newStats,
+          currentEvent: event
         });
 
         // 检查结局
@@ -271,7 +325,13 @@ export const useGameStore = create<GameStore>()(
       },
 
       resetGame: () => {
-        set(initialState);
+        set({
+          ...initialState,
+          inventory: initialInventory,
+          diary: initialDiary,
+          coins: initialCoins,
+          todayInteractions: []
+        });
       },
 
       acceptWarning: () => {
@@ -282,6 +342,176 @@ export const useGameStore = create<GameStore>()(
         set(state => ({
           settings: { ...state.settings, ...settings }
         }));
+      },
+
+      // 物品系统
+      addItem: (itemId: string, quantity = 1) => {
+        set(state => {
+          const existing = state.inventory.find(i => i.itemId === itemId);
+          if (existing) {
+            return {
+              inventory: state.inventory.map(i =>
+                i.itemId === itemId
+                  ? { ...i, quantity: i.quantity + quantity }
+                  : i
+              )
+            };
+          }
+          return {
+            inventory: [...state.inventory, { itemId, quantity }]
+          };
+        });
+      },
+
+      removeItem: (itemId: string, quantity = 1) => {
+        const state = get();
+        const existing = state.inventory.find(i => i.itemId === itemId);
+        if (!existing || existing.quantity < quantity) return false;
+
+        if (existing.quantity <= quantity) {
+          set({ inventory: state.inventory.filter(i => i.itemId !== itemId) });
+        } else {
+          set({
+            inventory: state.inventory.map(i =>
+              i.itemId === itemId
+                ? { ...i, quantity: i.quantity - quantity }
+                : i
+            )
+          });
+        }
+        return true;
+      },
+
+      useItem: (itemId: string) => {
+        const state = get();
+        const { items, canUseItem } = require('@/lib/items');
+        const item = items[itemId];
+
+        if (!item) return { success: false, message: '物品不存在' };
+
+        const inventoryItem = state.inventory.find(i => i.itemId === itemId);
+        if (!inventoryItem || inventoryItem.quantity <= 0) {
+          return { success: false, message: '没有这个物品' };
+        }
+
+        const useCheck = canUseItem(itemId, state.cat);
+        if (!useCheck.canUse) {
+          return { success: false, message: useCheck.reason };
+        }
+
+        // 特殊物品处理
+        let specialMessage = '';
+        const updates: Partial<GameState> = {};
+
+        // 日记本 - 解锁日记功能
+        if (itemId === 'diary' && !state.hasDiary) {
+          updates.hasDiary = true;
+          specialMessage = '她接过日记本，轻轻抚摸着封面...';
+        } else if (itemId === 'diary' && state.hasDiary) {
+          return { success: false, message: '她已经有一本日记本了' };
+        }
+
+        // 合照 - 特殊纪念品
+        if (itemId === 'photo' && !state.hasPhoto) {
+          updates.hasPhoto = true;
+          specialMessage = '她看着照片中的两个人，眼中闪过一丝光芒...';
+        }
+
+        // 项圈 - 黑暗物品
+        if (itemId === 'collar') {
+          if (state.hasCollar) {
+            return { success: false, message: '她已经戴着项圈了' };
+          }
+          updates.hasCollar = true;
+          specialMessage = '......';
+        }
+
+        // 应用效果
+        const newCat = { ...state.cat };
+        if (item.effect.affection) newCat.affection = Math.max(0, Math.min(100, newCat.affection + item.effect.affection));
+        if (item.effect.corruption) newCat.corruption = Math.max(0, Math.min(100, newCat.corruption + item.effect.corruption));
+        if (item.effect.health) newCat.health = Math.max(0, Math.min(100, newCat.health + item.effect.health));
+        if (item.effect.sanity) newCat.sanity = Math.max(0, Math.min(100, newCat.sanity + item.effect.sanity));
+        if (item.effect.trauma) newCat.trauma = Math.max(0, Math.min(100, newCat.trauma + item.effect.trauma));
+        if (item.effect.dependence) newCat.dependence = Math.max(0, Math.min(100, newCat.dependence + item.effect.dependence));
+
+        // 更新库存
+        let newInventory = state.inventory;
+        if (!item.permanent) {
+          if (inventoryItem.quantity <= 1) {
+            newInventory = state.inventory.filter(i => i.itemId !== itemId);
+          } else {
+            newInventory = state.inventory.map(i =>
+              i.itemId === itemId ? { ...i, quantity: i.quantity - 1 } : i
+            );
+          }
+        }
+
+        set({ cat: newCat, inventory: newInventory, ...updates });
+
+        // 返回成功消息
+        return {
+          success: true,
+          message: specialMessage || `送出了${item.name}`
+        };
+      },
+
+      // 商店
+      buyItem: (itemId: string) => {
+        const state = get();
+        const { items, isItemUnlocked } = require('@/lib/items');
+        const item = items[itemId];
+
+        if (!item) return { success: false, message: '物品不存在' };
+        if (!isItemUnlocked(itemId, { affection: state.cat.affection, daysPassed: state.stats.daysPassed })) {
+          return { success: false, message: '物品尚未解锁' };
+        }
+        if (state.coins < item.price) {
+          return { success: false, message: '金币不足' };
+        }
+
+        set(state => {
+          const existing = state.inventory.find(i => i.itemId === itemId);
+          let newInventory: InventoryItem[];
+
+          if (existing && item.stackable) {
+            newInventory = state.inventory.map(i =>
+              i.itemId === itemId ? { ...i, quantity: i.quantity + 1 } : i
+            );
+          } else if (!existing) {
+            newInventory = [...state.inventory, { itemId, quantity: 1 }];
+          } else {
+            return { coins: state.coins - item.price }; // 已拥有非堆叠物品
+          }
+
+          return {
+            coins: state.coins - item.price,
+            inventory: newInventory
+          };
+        });
+
+        return { success: true };
+      },
+
+      // 日记系统
+      addDiaryEntry: () => {
+        const state = get();
+        const entry = generateDiaryEntry(
+          state.time.day,
+          state.cat,
+          state.stats,
+          state.todayInteractions
+        );
+
+        set(state => ({
+          diary: [...state.diary, entry],
+          todayInteractions: []
+        }));
+      },
+
+      // 资源
+      addCoins: (amount: number) => {
+        set(state => ({ coins: state.coins + amount }));
       }
     }),
     {
@@ -295,7 +525,14 @@ export const useGameStore = create<GameStore>()(
         ending: state.ending,
         hasAcceptedWarning: state.hasAcceptedWarning,
         cooldowns: state.cooldowns,
-        settings: state.settings
+        settings: state.settings,
+        inventory: state.inventory,
+        diary: state.diary,
+        coins: state.coins,
+        // 特殊物品状态
+        hasDiary: state.hasDiary,
+        hasPhoto: state.hasPhoto,
+        hasCollar: state.hasCollar
       })
     }
   )

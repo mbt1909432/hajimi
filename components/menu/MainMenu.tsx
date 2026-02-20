@@ -25,8 +25,13 @@ export default function MainMenu({ onSettings }: MainMenuProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
-         style={{ background: 'var(--bg-primary)' }}>
+    <div className="flex items-center justify-center p-4 relative overflow-hidden"
+         style={{
+           background: 'var(--bg-primary)',
+           minHeight: '100dvh',
+           paddingTop: 'env(safe-area-inset-top, 0)',
+           paddingBottom: 'env(safe-area-inset-bottom, 0)'
+         }}>
 
       {/* 背景渐变 */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(107,91,149,0.1)] to-transparent" />
@@ -41,33 +46,39 @@ export default function MainMenu({ onSettings }: MainMenuProps) {
       </div>
 
       <div className="text-center animate-fade-in relative z-10">
-        {/* 猫咪剪影 */}
+        {/* 角色剪影 */}
         <div className="mb-8">
           <svg
             width="140"
-            height="140"
-            viewBox="0 0 200 200"
+            height="180"
+            viewBox="0 0 240 360"
             className="mx-auto"
             style={{
               animation: 'breathe 4s ease-in-out infinite',
               filter: 'drop-shadow(0 0 20px rgba(201, 160, 220, 0.3))'
             }}
           >
-            {/* 猫咪剪影 */}
-            <ellipse cx="100" cy="130" rx="50" ry="40" fill="rgba(201, 160, 220, 0.15)" />
-            <circle cx="100" cy="80" r="45" fill="rgba(201, 160, 220, 0.15)" />
+            {/* 头发后层 */}
+            <ellipse cx="120" cy="100" rx="75" ry="70" fill="rgba(201, 160, 220, 0.1)" />
             {/* 耳朵 */}
-            <polygon points="60,50 75,15 90,50" fill="rgba(201, 160, 220, 0.2)" />
-            <polygon points="110,50 125,15 140,50" fill="rgba(201, 160, 220, 0.2)" />
+            <polygon points="55,60 70,15 90,55" fill="rgba(201, 160, 220, 0.15)" />
+            <polygon points="150,55 170,15 185,60" fill="rgba(201, 160, 220, 0.15)" />
+            {/* 脸部 */}
+            <ellipse cx="120" cy="110" rx="55" ry="60" fill="rgba(201, 160, 220, 0.12)" />
+            {/* 头发刘海 */}
+            <path d="M65 70 Q80 30 120 35 Q160 30 175 70 Q165 55 140 60 Q120 45 100 60 Q75 55 65 70" fill="rgba(201, 160, 220, 0.15)" />
+            {/* 身体/衣服 */}
+            <path d="M70 190 Q50 200 45 260 L195 260 Q190 200 170 190 Q145 180 120 185 Q95 180 70 190" fill="rgba(201, 160, 220, 0.1)" />
             {/* 眼睛 */}
-            <ellipse cx="80" cy="75" rx="8" ry="6" fill="rgba(201, 160, 220, 0.4)" />
-            <ellipse cx="120" cy="75" rx="8" ry="6" fill="rgba(201, 160, 220, 0.4)" />
+            <ellipse cx="95" cy="115" rx="10" ry="8" fill="rgba(201, 160, 220, 0.3)" />
+            <ellipse cx="145" cy="115" rx="10" ry="8" fill="rgba(201, 160, 220, 0.3)" />
           </svg>
         </div>
 
-        {/* 标题 */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-2 tracking-tight font-title"
+        {/* 标题 - Fluid typography */}
+        <h1 className="font-bold mb-2 tracking-tight font-title"
             style={{
+              fontSize: 'clamp(1.875rem, 8vw, 3.75rem)',
               background: 'linear-gradient(135deg, var(--heal-primary), var(--heal-secondary))',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
@@ -79,7 +90,7 @@ export default function MainMenu({ onSettings }: MainMenuProps) {
         <div className="flex items-center justify-center gap-4 mb-12">
           <div className="h-px w-12 bg-gradient-to-r from-transparent to-[var(--heal-primary)]" />
           <p className="text-gray-400 text-sm md:text-base tracking-widest">
-            Cat&apos;s Whisper: Taming and Breaking
+            Whisper: Taming and Breaking
           </p>
           <div className="h-px w-12 bg-gradient-to-l from-transparent to-[var(--heal-primary)]" />
         </div>

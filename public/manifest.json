@@ -1,6 +1,6 @@
 {
-  "name": "Cat's Whisper: Taming and Breaking",
-  "short_name": "Cat's Whisper",
+  "name": "Whisper: Taming and Breaking",
+  "short_name": "Whisper",
   "description": "A dark healing simulation game",
   "start_url": "/",
   "display": "standalone",

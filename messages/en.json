@@ -1,6 +1,6 @@
 {
   "game": {
-    "title": "Cat's Whisper: Taming and Breaking",
+    "title": "Whisper: Taming and Breaking",
     "subtitle": "A Dark Healing Simulation",
     "warning": {
       "title": "Content Warning",
@@ -24,21 +24,21 @@
   },
   "actions": {
     "feed": "Feed",
-    "feedDesc": "Give food to the cat",
+    "feedDesc": "Give her food",
     "play": "Play",
-    "playDesc": "Play with the cat",
-    "pet": "Pet",
-    "petDesc": "Gently pet the cat",
+    "playDesc": "Play with her",
+    "pet": "Groom",
+    "petDesc": "Gently help tidy her hair",
     "clean": "Clean",
-    "cleanDesc": "Clean the cat's space",
+    "cleanDesc": "Clean her space",
     "scold": "Scold",
-    "scoldDesc": "Scold the cat harshly",
+    "scoldDesc": "Scold her harshly",
     "ignore": "Ignore",
-    "ignoreDesc": "Ignore the cat's needs",
+    "ignoreDesc": "Ignore her needs",
     "punish": "Punish",
-    "punishDesc": "Punish the cat",
-    "cage": "Cage",
-    "cageDesc": "Lock the cat in a cage"
+    "punishDesc": "Punish her",
+    "cage": "Confine",
+    "cageDesc": "Lock her in the room"
   },
   "evolution": {
     "wary": "Wary",
@@ -53,64 +53,64 @@
     "neighborReport": {
       "title": "Neighbor's Complaint",
       "description": "A neighbor heard strange noises and is asking questions...",
-      "choice1": "Explain it's just a playful cat",
+      "choice1": "Explain she's just being emotional",
       "choice2": "Tell them to mind their business"
     },
     "catSick": {
-      "title": "The Cat Seems Sick",
-      "description": "The cat has been lethargic and refuses to eat...",
-      "choice1": "Take to the vet",
+      "title": "She Seems Sick",
+      "description": "She has been lethargic and refuses to eat...",
+      "choice1": "Take care of her gently",
       "choice2": "Wait and see"
     },
     "escapeAttempt": {
       "title": "Escape Attempt",
-      "description": "You found scratch marks near the window...",
-      "choice1": "Secure the room better",
-      "choice2": "Let it have some freedom"
+      "description": "You found her trying to open the window...",
+      "choice1": "Stop her",
+      "choice2": "Let her have some freedom"
     },
     "attackBehavior": {
-      "title": "Sudden Attack",
-      "description": "The cat suddenly scratched your hand...",
+      "title": "Sudden Resistance",
+      "description": "She suddenly pushed your hand away...",
       "choice1": "Forgive and comfort",
       "choice2": "Scold and isolate"
     },
     "emotionalConnection": {
       "title": "Quiet Moment",
-      "description": "The cat approaches you and rests nearby...",
-      "choice1": "Gently stroke its fur",
+      "description": "She approaches you and sits nearby...",
+      "choice1": "Gently stroke her head",
       "choice2": "Ignore the gesture"
     },
     "injury": {
       "title": "Accidental Injury",
-      "description": "The cat got hurt while playing...",
+      "description": "She got hurt while moving around...",
       "choice1": "Treat the wound carefully",
       "choice2": "Leave it to heal on its own"
     }
   },
   "endings": {
     "partner": {
-      "title": "True Partner",
-      "description": "Through patience and love, you've formed an unbreakable bond. The cat trusts you completely and follows you everywhere. A beautiful friendship has blossomed from careful nurturing.",
+      "title": "True Bond",
+      "description": "Through patience and love, you've formed an unbreakable bond. She trusts you completely and follows you everywhere. A beautiful relationship has blossomed from careful nurturing.",
       "type": "Good Ending"
     },
     "numbPuppet": {
       "title": "Numb Puppet",
-      "description": "Fear has consumed all emotion. The cat no longer responds to anything - it simply exists, an empty shell. You have complete control, but at what cost?",
+      "description": "Fear has consumed all emotion. She no longer responds to anything - she simply exists, an empty shell. You have complete control, but at what cost?",
       "type": "Dark Ending"
     },
     "escape": {
       "title": "Escape from Cage",
-      "description": "One night, the cat seized its chance and disappeared through an open window. You see it sometimes in the neighborhood, wild and free. It never looks back.",
+      "description": "One night, she seized her chance and disappeared through an open window. You see her sometimes in the neighborhood, wild and free. She never looks back.",
       "type": "Bittersweet Ending"
     },
     "revenge": {
       "title": "Vengeful Spirit",
-      "description": "The cat's fear transformed into hatred. One dark night, it attacked with unexpected ferocity. Be careful - wounded souls sometimes bite back.",
+      "description": "Her fear transformed into hatred. One dark night, she fought back with unexpected ferocity. Be careful - wounded souls sometimes bite back.",
       "type": "Dark Ending"
     },
     "death": {
-      "title": "Shadow of Death",
-      "description": "Neglect took its toll. The cat grew weaker each day until it could no longer hold on. Some wounds cannot be healed...",
+      "title": "Fading Shadow",
+      "description": "Neglect took its toll. She grew weaker each day until she could no longer hold on. Some wounds cannot be healed...",
       "type": "Tragic Ending"
     }
   },

@@ -1,11 +1,11 @@
 // ============================================
-// 希尔薇风格游戏系统设计
+// 兽娘养成游戏系统设计
 // ============================================
 
 // 时间段
 export type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
 
-// 猫咪进化阶段（对应希尔薇的状态变化）
+// 角色进化阶段
 export type EvolutionStage =
   | 'traumatized'  // 创伤 - 初始状态，害怕一切
   | 'wary'         // 警惕 - 开始适应
@@ -15,7 +15,7 @@ export type EvolutionStage =
   | 'broken'       // 崩坏 - 失去自我（堕落线）
   | 'rebellious';  // 叛逆 - 内心抗拒
 
-// 猫咪状态
+// 角色状态
 export interface CatState {
   // 核心数值 (0-100)
   affection: number;    // 好感度 (替代 trust)
@@ -47,7 +47,7 @@ export type InteractionType =
   // 照顾类 (care)
   | 'feed'          // 喂食
   | 'treat'         // 治疗
-  | 'groom'         // 梳理毛发
+  | 'groom'         // 整理头发
   | 'letRest'       // 让它休息
   // 亲密类 (affection)
   | 'petHead'       // 摸头
@@ -188,6 +188,10 @@ export interface GameState {
   hasAcceptedWarning: boolean;
   cooldowns: Record<InteractionType, number>;
   settings: GameSettings;
+  // 特殊物品解锁
+  hasDiary: boolean;          // 是否有日记本
+  hasPhoto: boolean;          // 是否有合照
+  hasCollar: boolean;         // 是否戴上项圈
 }
 
 // 游戏设置
@@ -195,4 +199,46 @@ export interface GameSettings {
   textSpeed: 'slow' | 'normal' | 'fast';
   autoPlayDelay: number;
   showAffectionChange: boolean;
+}
+
+// 物品类型
+export type ItemType = 'food' | 'medicine' | 'toy' | 'accessory' | 'special';
+
+// 物品定义
+export interface Item {
+  id: string;
+  name: string;
+  description: string;
+  type: ItemType;
+  effect: InteractionEffect;
+  price: number;
+  stackable: boolean;
+  permanent?: boolean;
+  dark?: boolean;
+  unlockCondition?: {
+    minAffection?: number;
+    minDay?: number;
+  };
+}
+
+// 背包物品
+export interface InventoryItem {
+  itemId: string;
+  quantity: number;
+  equipped?: boolean;
+}
+
+// 日记条目
+export interface DiaryEntry {
+  day: number;
+  date: string;
+  mood: 'happy' | 'sad' | 'scared' | 'neutral' | 'hopeful';
+  content: string;
+  special?: boolean;
+}
+
+// 玩家资源
+export interface PlayerResources {
+  coins: number;
+  inventory: InventoryItem[];
 }

@@ -33,8 +33,8 @@ export const interactions: Record<InteractionType, Interaction> = {
   groom: {
     id: 'groom',
     category: 'care',
-    displayName: '梳理毛发',
-    description: '轻轻地帮它梳理凌乱的毛发',
+    displayName: '整理头发',
+    description: '温柔地帮她整理凌乱的头发',
     effect: {
       affection: 4,
       trauma: -2,

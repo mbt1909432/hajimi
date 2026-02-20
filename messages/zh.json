@@ -1,6 +1,6 @@
 {
   "game": {
-    "title": "猫的低语：驯服与崩坏",
+    "title": "低语：驯服与崩坏",
     "subtitle": "一个黑暗治愈养成游戏",
     "warning": {
       "title": "内容警告",
@@ -24,21 +24,21 @@
   },
   "actions": {
     "feed": "喂食",
-    "feedDesc": "给猫咪食物",
+    "feedDesc": "给她食物",
     "play": "玩耍",
-    "playDesc": "与猫咪玩耍",
-    "pet": "梳毛",
-    "petDesc": "轻柔地抚摸猫咪",
+    "playDesc": "与她一起玩耍",
+    "pet": "整理",
+    "petDesc": "温柔地帮她整理头发",
     "clean": "清洁",
-    "cleanDesc": "清洁猫咪的空间",
+    "cleanDesc": "清洁她的空间",
     "scold": "呵斥",
-    "scoldDesc": "严厉地责骂猫咪",
+    "scoldDesc": "严厉地责骂她",
     "ignore": "忽视",
-    "ignoreDesc": "无视猫咪的需求",
+    "ignoreDesc": "无视她的需求",
     "punish": "惩罚",
-    "punishDesc": "惩罚猫咪",
+    "punishDesc": "惩罚她",
     "cage": "囚禁",
-    "cageDesc": "将猫咪关进笼子"
+    "cageDesc": "将她关进房间"
   },
   "evolution": {
     "wary": "警惕",
@@ -53,64 +53,64 @@
     "neighborReport": {
       "title": "邻居的询问",
       "description": "邻居听到了奇怪的声音，正在询问...",
-      "choice1": "解释只是猫咪在玩耍",
+      "choice1": "解释只是她在闹情绪",
       "choice2": "让他们少管闲事"
     },
     "catSick": {
-      "title": "猫咪生病了",
-      "description": "猫咪一直无精打采，拒绝进食...",
-      "choice1": "带去看兽医",
+      "title": "她生病了",
+      "description": "她一直无精打采，拒绝进食...",
+      "choice1": "温柔地照顾她",
       "choice2": "先观察一下"
     },
     "escapeAttempt": {
       "title": "逃跑尝试",
-      "description": "你在窗户边发现了抓痕...",
-      "choice1": "加强房间安全",
-      "choice2": "给它一些自由空间"
+      "description": "你发现她正在试图打开窗户...",
+      "choice1": "阻止她",
+      "choice2": "给她一些自由空间"
     },
     "attackBehavior": {
-      "title": "突然攻击",
-      "description": "猫咪突然抓伤了你的手...",
+      "title": "突然反抗",
+      "description": "她突然推开了你的手...",
       "choice1": "原谅并安抚",
       "choice2": "责骂并隔离"
     },
     "emotionalConnection": {
       "title": "宁静时刻",
-      "description": "猫咪靠近你，在旁边休息...",
-      "choice1": "轻轻抚摸它的毛",
-      "choice2": "无视它的举动"
+      "description": "她靠近你，在旁边坐下...",
+      "choice1": "轻轻抚摸她的头",
+      "choice2": "无视她的举动"
     },
     "injury": {
       "title": "意外受伤",
-      "description": "猫咪在玩耍时受伤了...",
+      "description": "她在活动时受伤了...",
       "choice1": "小心处理伤口",
-      "choice2": "让它自己愈合"
+      "choice2": "让她自己愈合"
     }
   },
   "endings": {
     "partner": {
-      "title": "真正的伙伴",
-      "description": "通过耐心和爱心，你们建立了牢不可破的纽带。猫咪完全信任你，处处跟随你。一段美好的友谊从精心的呵护中绽放。",
+      "title": "真正的羁绊",
+      "description": "通过耐心和爱心，你们建立了牢不可破的纽带。她完全信任你，处处跟随你。一段美好的关系从精心的呵护中绽放。",
       "type": "好结局"
     },
     "numbPuppet": {
       "title": "麻木傀儡",
-      "description": "恐惧吞噬了所有情感。猫咪不再对任何事物做出反应——它只是存在着，一副空壳。你获得了完全的控制权，但代价是什么？",
+      "description": "恐惧吞噬了所有情感。她不再对任何事物做出反应——她只是存在着，一副空壳。你获得了完全的控制权，但代价是什么？",
       "type": "黑暗结局"
     },
     "escape": {
       "title": "逃离囚笼",
-      "description": "一天夜里，猫咪抓住机会从开着的窗户消失了。你有时会在附近看到它，野性而自由。它从未回头。",
+      "description": "一天夜里，她抓住机会从开着的窗户消失了。你有时会在附近看到她，自由而美丽。她从未回头。",
       "type": "苦乐参半结局"
     },
     "revenge": {
       "title": "怨恨复仇",
-      "description": "猫咪的恐惧转化为仇恨。一个黑暗的夜晚，它以意想不到的凶猛攻击。小心——受伤的灵魂有时会反击。",
+      "description": "她的恐惧转化为仇恨。一个黑暗的夜晚，她以意想不到的方式反击。小心——受伤的灵魂有时会反抗。",
       "type": "黑暗结局"
     },
     "death": {
-      "title": "病逝阴影",
-      "description": "忽视带来了恶果。猫咪一天天虚弱，直到无法坚持。有些伤口无法愈合...",
+      "title": "消逝阴影",
+      "description": "忽视带来了恶果。她一天天虚弱，直到无法坚持。有些伤口无法愈合...",
       "type": "悲剧结局"
     }
   },

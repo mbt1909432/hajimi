@@ -117,7 +117,10 @@ export function getEvolutionStageName(stage: EvolutionStage): string {
   return names[stage];
 }
 
-// 获取猫咪心情（用于动画和表情）
+// 角色名字
+export const CHARACTER_NAME = '弗洛';
+
+// 获取角色心情（用于动画和表情）
 export function getCatMood(state: CatState): string {
   const { affection, corruption, health, sanity, trauma } = state;
 
@@ -132,7 +135,7 @@ export function getCatMood(state: CatState): string {
   return 'scared';
 }
 
-// 获取猫咪动画类名
+// 获取角色动画类名
 export function getCatAnimation(state: CatState): string {
   const mood = getCatMood(state);
 
