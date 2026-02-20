@@ -1,10 +1,11 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useSettingsStore } from '@/store/settingsStore';
 import { useGameStore } from '@/store/gameStore';
-import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
+import Button from '@/components/ui/Button';
 
 interface SettingsProps {
   isOpen: boolean;
@@ -12,9 +13,23 @@ interface SettingsProps {
 }
 
 export default function Settings({ isOpen, onClose }: SettingsProps) {
+  const router = useRouter();
   const t = useTranslations();
   const { language, setLanguage, soundEnabled, toggleSound, musicEnabled, toggleMusic } = useSettingsStore();
   const { resetGame } = useGameStore();
+
+  const handleLanguageChange = (newLang: 'en' | 'zh') => {
+    if (newLang === language) return;
+
+    // 设置 cookie
+    document.cookie = `language=${newLang}; path=/; max-age=31536000`;
+
+    // 更新 Zustand store
+    setLanguage(newLang);
+
+    // 刷新页面以应用新语言
+    router.refresh();
+  };
 
   const handleReset = () => {
     if (confirm(t('ui.resetConfirm'))) {
@@ -30,7 +45,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
           <span className="text-gray-300">{t('settings.language')}</span>
           <div className="flex gap-2">
             <button
-              onClick={() => setLanguage('zh')}
+              onClick={() => handleLanguageChange('zh')}
               className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
               style={{
                 background: language === 'zh'
@@ -43,7 +58,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
               中文
             </button>
             <button
-              onClick={() => setLanguage('en')}
+              onClick={() => handleLanguageChange('en')}
               className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
               style={{
                 background: language === 'en'
