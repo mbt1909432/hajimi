@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
@@ -17,6 +17,7 @@ import CGGallery from './CGGallery';
 import SoundSettings from './SoundSettings';
 import { playInteractionSound } from '@/lib/sound';
 import { CHARACTER_NAME } from '@/lib/gameLogic';
+import { checkEndingOmen, MAX_GAME_DAYS } from '@/lib/endings';
 import type { InteractionType, EventChoice } from '@/types/game';
 
 const EventModal = dynamic(() => import('./EventModal'), { ssr: false });
@@ -56,6 +57,11 @@ export default function GameScreen() {
     }
     return () => stopBGM();
   }, [isBGMPlaying, playBGM, stopBGM]);
+
+  // 结局预兆
+  const endingOmen = useMemo(() => {
+    return checkEndingOmen(cat, stats);
+  }, [cat, stats]);
 
   const handleInteract = useCallback((type: InteractionType) => {
     const result = interact(type);
@@ -246,7 +252,7 @@ export default function GameScreen() {
         {/* 对话/状态文字 */}
         <div className="mb-4">
           <p className="text-gray-400 text-xs mb-2 tracking-wider">
-            第 {time.day} 天 · {getTimeText(time.timeOfDay)}
+            第 {time.day} 天 / {MAX_GAME_DAYS} 天 · {getTimeText(time.timeOfDay)}
           </p>
           <p className="text-sm text-[var(--heal-primary)] mb-1">{CHARACTER_NAME}</p>
           <p className="text-base md:text-lg text-gray-200 leading-relaxed">
@@ -254,6 +260,26 @@ export default function GameScreen() {
               ? '她正在安静地睡着...'
               : getCharacterStatusText(cat, stats)}
           </p>
+
+          {/* 结局预兆提示 */}
+          {endingOmen && (
+            <div
+              className={`
+                mt-3 p-3 rounded-xl text-sm animate-fade-in
+                ${endingOmen.urgency === 'high'
+                  ? 'bg-amber-500/20 border border-amber-500/30'
+                  : 'bg-white/5 border border-white/10'
+                }
+              `}
+            >
+              <p className={`font-medium mb-1 ${endingOmen.urgency === 'high' ? 'text-amber-300' : 'text-gray-400'}`}>
+                {endingOmen.title}
+              </p>
+              <p className="text-gray-400 text-xs">
+                {endingOmen.message}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* 互动按钮区域 */}

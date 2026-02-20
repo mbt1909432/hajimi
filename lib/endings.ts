@@ -137,8 +137,21 @@ export const endings: Ending[] = [
       state.trauma >= 50 && state.trauma <= 70 && // 经历过创伤但未完全愈合
       state.sanity >= 60 &&
       state.corruption >= 20 && state.corruption <= 40 // 有一些黑暗但不深
+  },
+  // ============ 兜底结局 ============
+  {
+    id: 'ordinary',
+    title: '平凡的日子',
+    description: '日子就这样一天天过去。没有惊天动地的改变，也没有戏剧性的转折。她习惯了这种生活，你也习惯了她的存在。也许这就是大多数人的人生——平淡，但也算得上安稳。',
+    type: 'neutral',
+    // 60天后仍未触发其他结局，则触发此结局
+    checkCondition: (_state: CatState, stats: GameStats) =>
+      stats.daysPassed >= 60
   }
 ];
+
+// 最大游戏天数
+export const MAX_GAME_DAYS = 60;
 
 // 结局预兆 - 当接近某个结局时显示的提示
 export interface EndingOmen {
@@ -150,6 +163,25 @@ export interface EndingOmen {
 
 // 检查结局预兆
 export function checkEndingOmen(state: CatState, stats: GameStats): EndingOmen | null {
+  // 接近天数上限的警告
+  if (stats.daysPassed >= 55) {
+    return {
+      endingId: 'ordinary',
+      title: '时间的尽头',
+      message: '不知不觉中，很多日子已经过去了。也许故事很快就会有结局...',
+      urgency: 'high'
+    };
+  }
+
+  if (stats.daysPassed >= 50) {
+    return {
+      endingId: 'ordinary',
+      title: '时光流逝',
+      message: '时间在悄悄流逝，这个篇章似乎快要结束了...',
+      urgency: 'medium'
+    };
+  }
+
   // 真正的羁绊预兆
   if (stats.daysPassed >= 15 && state.evolutionStage === 'devoted' && state.affection >= 80) {
     return {

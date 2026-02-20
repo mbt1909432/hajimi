@@ -145,7 +145,8 @@ export type EndingType =
   | 'puppet'        // 傀儡结局 - 完全控制
   | 'symbiosis'     // 共生结局 - 互相依赖
   | 'sacrifice'     // 献祭结局 - 黑暗宗教线
-  | 'rebirth';      // 涅槃结局 - 痛苦中重生
+  | 'rebirth'       // 涅槃结局 - 痛苦中重生
+  | 'ordinary';     // 平凡结局 - 兜底
 
 export interface Ending {
   id: EndingType;
