@@ -84,7 +84,8 @@ export default function GameScreen() {
       <button
         onClick={handleAdvanceTime}
         disabled={!!currentEvent}
-        className="advance-button"
+        aria-label={time.actionsRemaining > 0 ? `推进时间，剩余${time.actionsRemaining}次行动` : '时间已耗尽'}
+        className="advance-button btn-ux"
         style={{
           position: 'absolute',
           bottom: '220px',
@@ -95,7 +96,7 @@ export default function GameScreen() {
           borderRadius: '24px',
           color: 'white',
           cursor: 'pointer',
-          transition: 'all 0.3s ease',
+          transition: 'all 0.2s ease',
           zIndex: 'var(--z-dialog)'
         }}
       >
@@ -120,7 +121,7 @@ export default function GameScreen() {
 
         {/* 对话/状态文字 */}
         <div className="mb-4">
-          <p className="text-gray-500 text-xs mb-2 tracking-wider">
+          <p className="text-gray-400 text-xs mb-2 tracking-wider">
             第 {time.day} 天 · {getTimeText(time.timeOfDay)}
           </p>
           <p className="text-base md:text-lg text-gray-200 leading-relaxed">
@@ -134,19 +135,22 @@ export default function GameScreen() {
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => setShowActions(!showActions)}
-            className="btn-interact px-6 py-3 rounded-xl text-white font-medium"
+            aria-expanded={showActions}
+            aria-controls="action-panel"
+            className="btn-ux px-6 py-3 rounded-xl text-white font-medium transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--heal-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
             style={{
               background: showActions
                 ? 'linear-gradient(135deg, var(--neutral-purple), var(--bg-secondary))'
                 : 'linear-gradient(135deg, var(--heal-primary), var(--neutral-purple))',
-              border: '1px solid rgba(201, 160, 220, 0.3)'
+              border: '1px solid rgba(201, 160, 220, 0.3)',
+              cursor: 'pointer'
             }}
           >
             {showActions ? '收起' : '互动'}
           </button>
 
           {showActions && (
-            <div className="w-full mt-4 animate-fade-in">
+            <div id="action-panel" className="w-full mt-4 animate-fade-in">
               <ActionPanel
                 onInteract={handleInteract}
                 disabled={!!currentEvent || cat.isSleeping}
@@ -156,7 +160,7 @@ export default function GameScreen() {
         </div>
 
         {/* 统计 - 简化版 */}
-        <div className="mt-4 pt-3 border-t border-white/5 flex justify-center gap-6 text-xs">
+        <div className="mt-4 pt-3 border-t border-white/10 flex justify-center gap-6 text-xs">
           <span style={{ color: 'var(--care)' }}>照顾 {stats.careInteractions}</span>
           <span style={{ color: 'var(--affection)' }}>亲密 {stats.affectionInteractions}</span>
           <span style={{ color: 'var(--discipline)' }}>管教 {stats.disciplineInteractions}</span>

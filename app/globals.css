@@ -105,6 +105,27 @@ body {
 .cat-sick { animation: sick 2s ease-in-out infinite; }
 
 /* ============================================
+   无障碍：减少动画
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .cat-idle,
+  .cat-happy,
+  .cat-scared,
+  .cat-sick {
+    animation: none !important;
+  }
+}
+
+/* ============================================
    页面转场动画
    ============================================ */
 @keyframes fadeIn {
@@ -366,9 +387,43 @@ body {
   z-index: var(--z-dialog);
 }
 
-.advance-button:hover {
+.advance-button:hover:not(:disabled) {
   background: rgba(107, 91, 149, 0.9);
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(107, 91, 149, 0.4);
+}
+
+.advance-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.advance-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.advance-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--heal-primary), 0 0 0 4px var(--bg-primary);
+}
+
+/* ============================================
+   通用按钮交互样式
+   ============================================ */
+.btn-ux {
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-ux:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--heal-primary), 0 0 0 4px var(--bg-primary);
+}
+
+.btn-ux:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* ============================================
