@@ -123,6 +123,12 @@ body {
   100% { transform: scale(1); }
 }
 
+/* 涟漪效果 */
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
 .page-transition {
   animation: fadeIn 0.3s ease-out;
 }

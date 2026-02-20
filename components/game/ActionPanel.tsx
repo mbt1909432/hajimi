@@ -1,14 +1,12 @@
 'use client';
 
-import { memo, useMemo, useCallback } from 'react';
+import { memo, useMemo, useCallback, useRef } from 'react';
 import type { InteractionType, InteractionCategory } from '@/types/game';
 import {
-  interactions,
   getInteractionsByCategory,
   getCategoryName,
   isInteractionAvailable
 } from '@/lib/interactions';
-import Button from '@/components/ui/Button';
 import { useGameStore } from '@/store/gameStore';
 
 interface ActionPanelProps {
@@ -20,12 +18,12 @@ interface ActionPanelProps {
 const CATEGORY_ORDER: InteractionCategory[] = ['care', 'affection', 'discipline', 'dark', 'special'];
 
 // 类别配置
-const CATEGORY_CONFIG: Record<InteractionCategory, { color: string; borderColor: string }> = {
-  care: { color: 'var(--care)', borderColor: 'rgba(99, 179, 237, 0.3)' },
-  affection: { color: 'var(--affection)', borderColor: 'rgba(246, 135, 179, 0.3)' },
-  discipline: { color: 'var(--discipline)', borderColor: 'rgba(246, 224, 94, 0.3)' },
-  dark: { color: 'var(--dark-action)', borderColor: 'rgba(252, 129, 129, 0.3)' },
-  special: { color: 'var(--special)', borderColor: 'rgba(183, 148, 244, 0.3)' }
+const CATEGORY_CONFIG: Record<InteractionCategory, { color: string; borderColor: string; bgColor: string }> = {
+  care: { color: 'var(--care)', borderColor: 'rgba(99, 179, 237, 0.4)', bgColor: 'rgba(99, 179, 237, 0.1)' },
+  affection: { color: 'var(--affection)', borderColor: 'rgba(246, 135, 179, 0.4)', bgColor: 'rgba(246, 135, 179, 0.1)' },
+  discipline: { color: 'var(--discipline)', borderColor: 'rgba(246, 224, 94, 0.4)', bgColor: 'rgba(246, 224, 94, 0.1)' },
+  dark: { color: 'var(--dark-action)', borderColor: 'rgba(252, 129, 129, 0.4)', bgColor: 'rgba(139, 58, 58, 0.15)' },
+  special: { color: 'var(--special)', borderColor: 'rgba(183, 148, 244, 0.4)', bgColor: 'rgba(183, 148, 244, 0.1)' }
 };
 
 function ActionPanelComponent({ onInteract, disabled }: ActionPanelProps) {
@@ -97,8 +95,8 @@ const ActionCategory = memo(function ActionCategory({
     <div>
       {/* 类别标题 */}
       <div className="flex items-center gap-2 mb-2">
-        <div className="w-1 h-4 rounded-full" style={{ background: config.color }} />
-        <h3 className="text-xs font-medium uppercase tracking-wider" style={{ color: config.color }}>
+        <div className="w-1.5 h-4 rounded-full" style={{ background: config.color }} />
+        <h3 className="text-xs font-semibold uppercase tracking-wider" style={{ color: config.color }}>
           {categoryName}
         </h3>
       </div>
@@ -108,38 +106,121 @@ const ActionCategory = memo(function ActionCategory({
         {availableInteractions.map((interaction) => {
           const onCooldown = isOnCooldown(interaction.id);
           const remaining = getRemainingCooldown(interaction.id);
+          const isDisabled = disabled || onCooldown;
 
           return (
-            <button
+            <ActionButton
               key={interaction.id}
+              interaction={interaction}
+              category={category}
+              config={config}
+              onCooldown={onCooldown}
+              remaining={remaining}
+              disabled={isDisabled}
               onClick={() => onInteract(interaction.id)}
-              disabled={disabled || onCooldown}
-              className="action-card flex flex-col items-center justify-center py-3 px-2 min-h-[52px] transition-all duration-200"
-              style={{
-                borderColor: config.borderColor,
-                background: category === 'dark'
-                  ? 'rgba(139, 58, 58, 0.1)'
-                  : 'rgba(255, 255, 255, 0.03)'
-              }}
-            >
-              <span className="font-medium text-sm text-white">
-                {interaction.displayName}
-              </span>
-              {onCooldown && (
-                <span className="text-[10px] text-gray-500 mt-1">
-                  {remaining}s
-                </span>
-              )}
-              {!onCooldown && interaction.description && (
-                <span className="text-[10px] text-gray-500 mt-1 truncate w-full text-center">
-                  {interaction.description.slice(0, 10)}
-                </span>
-              )}
-            </button>
+            />
           );
         })}
       </div>
     </div>
+  );
+});
+
+// 独立的按钮组件，带有涟漪效果
+interface ActionButtonProps {
+  interaction: { id: InteractionType; displayName: string; description: string };
+  category: InteractionCategory;
+  config: { color: string; borderColor: string; bgColor: string };
+  onCooldown: boolean;
+  remaining: number;
+  disabled: boolean;
+  onClick: () => void;
+}
+
+const ActionButton = memo(function ActionButton({
+  interaction,
+  category,
+  config,
+  onCooldown,
+  remaining,
+  disabled,
+  onClick
+}: ActionButtonProps) {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    if (disabled) return;
+
+    const button = buttonRef.current;
+    if (!button) return;
+
+    // 涟漪效果
+    const ripple = document.createElement('span');
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+
+    ripple.style.cssText = `
+      position: absolute;
+      width: ${size}px;
+      height: ${size}px;
+      left: ${x}px;
+      top: ${y}px;
+      background: ${category === 'dark' ? 'rgba(252, 129, 129, 0.3)' : 'rgba(255, 255, 255, 0.2)'};
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple 0.5s ease-out;
+      pointer-events: none;
+    `;
+
+    button.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 500);
+
+    onClick();
+  }, [disabled, onClick, category]);
+
+  return (
+    <button
+      ref={buttonRef}
+      onClick={handleClick}
+      disabled={disabled}
+      className={`
+        relative overflow-hidden
+        flex flex-col items-center justify-center
+        py-3 px-2 min-h-[52px]
+        rounded-xl
+        transition-all duration-150 ease-out
+        select-none
+        ${disabled
+          ? 'opacity-40 cursor-not-allowed grayscale-[30%]'
+          : 'cursor-pointer hover:-translate-y-0.5 active:translate-y-0'
+        }
+      `}
+      style={{
+        borderColor: config.borderColor,
+        background: config.bgColor,
+        borderWidth: '1px',
+        boxShadow: disabled ? 'none' : `0 2px 8px ${config.bgColor}`
+      }}
+    >
+      <span
+        className="font-medium text-sm"
+        style={{ color: disabled ? '#666' : '#fff' }}
+      >
+        {interaction.displayName}
+      </span>
+      {onCooldown && (
+        <span className="text-[10px] text-gray-500 mt-1">
+          {remaining}s
+        </span>
+      )}
+      {!onCooldown && interaction.description && (
+        <span className="text-[10px] text-gray-500 mt-0.5 truncate w-full text-center px-1">
+          {interaction.description.slice(0, 12)}
+        </span>
+      )}
+    </button>
   );
 });
 
