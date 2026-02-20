@@ -140,7 +140,12 @@ export type EndingType =
   | 'escaped'       // 逃亡结局 - 逃离魔爪
   | 'revenge'       // 复仇结局 - 反噬
   | 'death'         // 死亡结局
-  | 'released';     // 放生结局
+  | 'released'      // 放生结局
+  | 'salvation'     // 神圣救赎 - 宗教治愈线
+  | 'puppet'        // 傀儡结局 - 完全控制
+  | 'symbiosis'     // 共生结局 - 互相依赖
+  | 'sacrifice'     // 献祭结局 - 黑暗宗教线
+  | 'rebirth';      // 涅槃结局 - 痛苦中重生
 
 export interface Ending {
   id: EndingType;
@@ -202,7 +207,7 @@ export interface GameSettings {
 }
 
 // 物品类型
-export type ItemType = 'food' | 'medicine' | 'toy' | 'accessory' | 'special';
+export type ItemType = 'food' | 'medicine' | 'toy' | 'accessory' | 'special' | 'religious';
 
 // 物品定义
 export interface Item {

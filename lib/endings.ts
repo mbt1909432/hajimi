@@ -77,6 +77,66 @@ export const endings: Ending[] = [
     type: 'secret',
     // 这个结局需要执行 release 互动才能触发，不是自动触发
     checkCondition: () => false
+  },
+  // ============ 新增结局 ============
+  {
+    id: 'salvation',
+    title: '神圣的救赎',
+    description: '在信仰的光芒中，她找到了内心的平静。那些曾经的创伤，在祈祷中慢慢愈合。她戴着十字架，眼中不再有恐惧，取而代之的是一种超然的安宁。也许这是你给她的最好礼物——灵魂的救赎。',
+    type: 'good',
+    checkCondition: (state: CatState, stats: GameStats) =>
+      stats.daysPassed >= 25 &&
+      state.affection >= 75 &&
+      state.corruption <= 15 &&
+      state.trauma <= 20 &&
+      state.sanity >= 80
+  },
+  {
+    id: 'puppet',
+    title: '完美的傀儡',
+    description: '她已经不再是一个独立的个体，而是你意志的延伸。每一个动作，每一个表情，都是你精心设计的产物。她微笑，因为你让她微笑；她哭泣，因为你让她哭泣。这就是你想要的——一个完美的、永远不会离开的玩偶。',
+    type: 'bad',
+    checkCondition: (state: CatState, stats: GameStats) =>
+      stats.daysPassed >= 30 &&
+      state.corruption >= 85 &&
+      state.dependence >= 90 &&
+      state.sanity <= 10 &&
+      state.affection >= 50 // 诡异的"好感"
+  },
+  {
+    id: 'symbiosis',
+    title: '共生',
+    description: '你们已经无法分离。她的存在定义了你，而你的存在也定义了她。这是一种超越普通羁绊的联系——就像两棵树的根系纠缠在一起，再也分不开。这是爱吗？还是某种更深的东西？答案已不再重要。',
+    type: 'secret',
+    checkCondition: (state: CatState, stats: GameStats) =>
+      stats.daysPassed >= 40 &&
+      state.affection >= 80 &&
+      state.dependence >= 85 &&
+      state.corruption >= 40 && state.corruption <= 60
+  },
+  {
+    id: 'sacrifice',
+    title: '献给黑暗的祭品',
+    description: '那些仪式蜡烛的火焰终于熄灭，但更黑暗的东西已经苏醒。她的眼神空洞，嘴角挂着永恒的微笑。在最后的时刻，她似乎感谢你——感谢你让她成为某种更大存在的容器。这真的是你想要的吗？',
+    type: 'bad',
+    checkCondition: (state: CatState, stats: GameStats) =>
+      stats.daysPassed >= 35 &&
+      state.corruption >= 90 &&
+      state.sanity <= 5 &&
+      state.trauma >= 80 &&
+      stats.darkInteractions >= 20
+  },
+  {
+    id: 'rebirth',
+    title: '涅槃',
+    description: '经过漫长的黑暗，她终于在痛苦中获得了新生。那些创伤没有消失，但它们不再控制她。她选择留下，不是因为依赖，也不是因为恐惧，而是因为她想要见证——见证你们共同创造的未来。',
+    type: 'secret',
+    checkCondition: (state: CatState, stats: GameStats) =>
+      stats.daysPassed >= 50 &&
+      state.affection >= 60 &&
+      state.trauma >= 50 && state.trauma <= 70 && // 经历过创伤但未完全愈合
+      state.sanity >= 60 &&
+      state.corruption >= 20 && state.corruption <= 40 // 有一些黑暗但不深
   }
 ];
 
