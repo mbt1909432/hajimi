@@ -227,10 +227,12 @@ export default function GameScreen() {
         bottom: '0',
         left: '0',
         right: '0',
-        minHeight: '200px',
+        maxHeight: '50vh',
         background: 'linear-gradient(180deg, rgba(10, 10, 18, 0.95) 0%, rgba(18, 18, 31, 0.98) 100%)',
         borderTop: '2px solid rgba(201, 160, 220, 0.2)',
-        padding: '20px 24px'
+        padding: '20px 24px',
+        overflowY: 'auto',
+        overscrollBehavior: 'contain'
       }}>
         {/* 状态栏 - 移动端 */}
         <div className="md:hidden mb-4">
@@ -316,7 +318,7 @@ export default function GameScreen() {
           </button>
 
           {showActions && (
-            <div id="action-panel" className="w-full mt-4 animate-fade-in">
+            <div id="action-panel" className="w-full mt-4 animate-fade-in" style={{ maxHeight: '40vh', overflowY: 'auto' }}>
               {time.actionsRemaining <= 0 ? (
                 <div className="text-center py-4 text-gray-400">
                   <p>当前时间段行动次数已用完</p>

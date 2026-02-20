@@ -401,12 +401,14 @@ export const useGameStore = create<GameStore>()(
 
         // 特殊物品处理
         let specialMessage = '';
+        let shouldRemoveFromInventory = false; // 是否应该从背包移除
         const updates: Partial<GameState> = {};
 
         // 日记本 - 解锁日记功能
         if (itemId === 'diary' && !state.hasDiary) {
           updates.hasDiary = true;
           specialMessage = '她接过日记本，轻轻抚摸着封面...';
+          shouldRemoveFromInventory = true; // 送出去后移除
         } else if (itemId === 'diary' && state.hasDiary) {
           return { success: false, message: '她已经有一本日记本了' };
         }
@@ -415,15 +417,17 @@ export const useGameStore = create<GameStore>()(
         if (itemId === 'photo' && !state.hasPhoto) {
           updates.hasPhoto = true;
           specialMessage = '她看着照片中的两个人，眼中闪过一丝光芒...';
+          shouldRemoveFromInventory = true;
         }
 
-        // 项圈 - 黑暗物品
+        // 项圈 - 黑暗物品（保留在背包，因为是装备）
         if (itemId === 'collar') {
           if (state.hasCollar) {
             return { success: false, message: '她已经戴着项圈了' };
           }
           updates.hasCollar = true;
           specialMessage = '......';
+          // 项圈不移除，保留在背包
         }
 
         // 应用效果
@@ -437,7 +441,13 @@ export const useGameStore = create<GameStore>()(
 
         // 更新库存
         let newInventory = state.inventory;
-        if (!item.permanent) {
+
+        // 特殊物品（日记本、合照）需要移除
+        if (shouldRemoveFromInventory) {
+          newInventory = state.inventory.filter(i => i.itemId !== itemId);
+        }
+        // 非永久物品也需要移除
+        else if (!item.permanent) {
           if (inventoryItem.quantity <= 1) {
             newInventory = state.inventory.filter(i => i.itemId !== itemId);
           } else {
@@ -470,18 +480,26 @@ export const useGameStore = create<GameStore>()(
           return { success: false, message: '金币不足' };
         }
 
+        // 特殊物品检查：日记本
+        if (itemId === 'diary' && state.hasDiary) {
+          return { success: false, message: '她已经有一本日记本了' };
+        }
+
+        // 检查是否已拥有非堆叠物品
+        const existing = state.inventory.find(i => i.itemId === itemId);
+        if (existing && !item.stackable) {
+          return { success: false, message: '已经拥有这个物品了' };
+        }
+
         set(state => {
-          const existing = state.inventory.find(i => i.itemId === itemId);
           let newInventory: InventoryItem[];
 
           if (existing && item.stackable) {
             newInventory = state.inventory.map(i =>
               i.itemId === itemId ? { ...i, quantity: i.quantity + 1 } : i
             );
-          } else if (!existing) {
-            newInventory = [...state.inventory, { itemId, quantity: 1 }];
           } else {
-            return { coins: state.coins - item.price }; // 已拥有非堆叠物品
+            newInventory = [...state.inventory, { itemId, quantity: 1 }];
           }
 
           return {
