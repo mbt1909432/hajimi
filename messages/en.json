@@ -1,0 +1,131 @@
+{
+  "game": {
+    "title": "Cat's Whisper: Taming and Breaking",
+    "subtitle": "A Dark Healing Simulation",
+    "warning": {
+      "title": "Content Warning",
+      "description": "This game explores dark themes including psychological manipulation and moral choices. Player discretion is advised.",
+      "understand": "I Understand",
+      "decline": "Decline"
+    }
+  },
+  "menu": {
+    "newGame": "New Game",
+    "continue": "Continue",
+    "settings": "Settings",
+    "quit": "Quit"
+  },
+  "stats": {
+    "trust": "Trust",
+    "fear": "Fear",
+    "health": "Health",
+    "wildness": "Wildness",
+    "day": "Day"
+  },
+  "actions": {
+    "feed": "Feed",
+    "feedDesc": "Give food to the cat",
+    "play": "Play",
+    "playDesc": "Play with the cat",
+    "pet": "Pet",
+    "petDesc": "Gently pet the cat",
+    "clean": "Clean",
+    "cleanDesc": "Clean the cat's space",
+    "scold": "Scold",
+    "scoldDesc": "Scold the cat harshly",
+    "ignore": "Ignore",
+    "ignoreDesc": "Ignore the cat's needs",
+    "punish": "Punish",
+    "punishDesc": "Punish the cat",
+    "cage": "Cage",
+    "cageDesc": "Lock the cat in a cage"
+  },
+  "evolution": {
+    "wary": "Wary",
+    "tame": "Tame",
+    "dependent": "Dependent",
+    "partner": "Partner",
+    "numb": "Numb",
+    "fearful": "Fearful",
+    "rebellious": "Rebellious"
+  },
+  "events": {
+    "neighborReport": {
+      "title": "Neighbor's Complaint",
+      "description": "A neighbor heard strange noises and is asking questions...",
+      "choice1": "Explain it's just a playful cat",
+      "choice2": "Tell them to mind their business"
+    },
+    "catSick": {
+      "title": "The Cat Seems Sick",
+      "description": "The cat has been lethargic and refuses to eat...",
+      "choice1": "Take to the vet",
+      "choice2": "Wait and see"
+    },
+    "escapeAttempt": {
+      "title": "Escape Attempt",
+      "description": "You found scratch marks near the window...",
+      "choice1": "Secure the room better",
+      "choice2": "Let it have some freedom"
+    },
+    "attackBehavior": {
+      "title": "Sudden Attack",
+      "description": "The cat suddenly scratched your hand...",
+      "choice1": "Forgive and comfort",
+      "choice2": "Scold and isolate"
+    },
+    "emotionalConnection": {
+      "title": "Quiet Moment",
+      "description": "The cat approaches you and rests nearby...",
+      "choice1": "Gently stroke its fur",
+      "choice2": "Ignore the gesture"
+    },
+    "injury": {
+      "title": "Accidental Injury",
+      "description": "The cat got hurt while playing...",
+      "choice1": "Treat the wound carefully",
+      "choice2": "Leave it to heal on its own"
+    }
+  },
+  "endings": {
+    "partner": {
+      "title": "True Partner",
+      "description": "Through patience and love, you've formed an unbreakable bond. The cat trusts you completely and follows you everywhere. A beautiful friendship has blossomed from careful nurturing.",
+      "type": "Good Ending"
+    },
+    "numbPuppet": {
+      "title": "Numb Puppet",
+      "description": "Fear has consumed all emotion. The cat no longer responds to anything - it simply exists, an empty shell. You have complete control, but at what cost?",
+      "type": "Dark Ending"
+    },
+    "escape": {
+      "title": "Escape from Cage",
+      "description": "One night, the cat seized its chance and disappeared through an open window. You see it sometimes in the neighborhood, wild and free. It never looks back.",
+      "type": "Bittersweet Ending"
+    },
+    "revenge": {
+      "title": "Vengeful Spirit",
+      "description": "The cat's fear transformed into hatred. One dark night, it attacked with unexpected ferocity. Be careful - wounded souls sometimes bite back.",
+      "type": "Dark Ending"
+    },
+    "death": {
+      "title": "Shadow of Death",
+      "description": "Neglect took its toll. The cat grew weaker each day until it could no longer hold on. Some wounds cannot be healed...",
+      "type": "Tragic Ending"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "soundEffects": "Sound Effects",
+    "music": "Music",
+    "back": "Back"
+  },
+  "ui": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "close": "Close",
+    "resetGame": "Reset Game",
+    "resetConfirm": "Are you sure you want to reset? All progress will be lost."
+  }
+}

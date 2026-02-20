@@ -1,0 +1,131 @@
+{
+  "game": {
+    "title": "猫的低语：驯服与崩坏",
+    "subtitle": "一个黑暗治愈养成游戏",
+    "warning": {
+      "title": "内容警告",
+      "description": "本游戏探索黑暗主题，包括心理操控和道德选择。请玩家谨慎游玩。",
+      "understand": "我已了解",
+      "decline": "拒绝"
+    }
+  },
+  "menu": {
+    "newGame": "开始新游戏",
+    "continue": "继续游戏",
+    "settings": "设置",
+    "quit": "退出"
+  },
+  "stats": {
+    "trust": "信任度",
+    "fear": "恐惧值",
+    "health": "健康度",
+    "wildness": "野性值",
+    "day": "第"
+  },
+  "actions": {
+    "feed": "喂食",
+    "feedDesc": "给猫咪食物",
+    "play": "玩耍",
+    "playDesc": "与猫咪玩耍",
+    "pet": "梳毛",
+    "petDesc": "轻柔地抚摸猫咪",
+    "clean": "清洁",
+    "cleanDesc": "清洁猫咪的空间",
+    "scold": "呵斥",
+    "scoldDesc": "严厉地责骂猫咪",
+    "ignore": "忽视",
+    "ignoreDesc": "无视猫咪的需求",
+    "punish": "惩罚",
+    "punishDesc": "惩罚猫咪",
+    "cage": "囚禁",
+    "cageDesc": "将猫咪关进笼子"
+  },
+  "evolution": {
+    "wary": "警惕",
+    "tame": "温顺",
+    "dependent": "依赖",
+    "partner": "伙伴",
+    "numb": "麻木",
+    "fearful": "恐惧",
+    "rebellious": "叛逆"
+  },
+  "events": {
+    "neighborReport": {
+      "title": "邻居的询问",
+      "description": "邻居听到了奇怪的声音，正在询问...",
+      "choice1": "解释只是猫咪在玩耍",
+      "choice2": "让他们少管闲事"
+    },
+    "catSick": {
+      "title": "猫咪生病了",
+      "description": "猫咪一直无精打采，拒绝进食...",
+      "choice1": "带去看兽医",
+      "choice2": "先观察一下"
+    },
+    "escapeAttempt": {
+      "title": "逃跑尝试",
+      "description": "你在窗户边发现了抓痕...",
+      "choice1": "加强房间安全",
+      "choice2": "给它一些自由空间"
+    },
+    "attackBehavior": {
+      "title": "突然攻击",
+      "description": "猫咪突然抓伤了你的手...",
+      "choice1": "原谅并安抚",
+      "choice2": "责骂并隔离"
+    },
+    "emotionalConnection": {
+      "title": "宁静时刻",
+      "description": "猫咪靠近你，在旁边休息...",
+      "choice1": "轻轻抚摸它的毛",
+      "choice2": "无视它的举动"
+    },
+    "injury": {
+      "title": "意外受伤",
+      "description": "猫咪在玩耍时受伤了...",
+      "choice1": "小心处理伤口",
+      "choice2": "让它自己愈合"
+    }
+  },
+  "endings": {
+    "partner": {
+      "title": "真正的伙伴",
+      "description": "通过耐心和爱心，你们建立了牢不可破的纽带。猫咪完全信任你，处处跟随你。一段美好的友谊从精心的呵护中绽放。",
+      "type": "好结局"
+    },
+    "numbPuppet": {
+      "title": "麻木傀儡",
+      "description": "恐惧吞噬了所有情感。猫咪不再对任何事物做出反应——它只是存在着，一副空壳。你获得了完全的控制权，但代价是什么？",
+      "type": "黑暗结局"
+    },
+    "escape": {
+      "title": "逃离囚笼",
+      "description": "一天夜里，猫咪抓住机会从开着的窗户消失了。你有时会在附近看到它，野性而自由。它从未回头。",
+      "type": "苦乐参半结局"
+    },
+    "revenge": {
+      "title": "怨恨复仇",
+      "description": "猫咪的恐惧转化为仇恨。一个黑暗的夜晚，它以意想不到的凶猛攻击。小心——受伤的灵魂有时会反击。",
+      "type": "黑暗结局"
+    },
+    "death": {
+      "title": "病逝阴影",
+      "description": "忽视带来了恶果。猫咪一天天虚弱，直到无法坚持。有些伤口无法愈合...",
+      "type": "悲剧结局"
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "soundEffects": "音效",
+    "music": "音乐",
+    "back": "返回"
+  },
+  "ui": {
+    "confirm": "确认",
+    "cancel": "取消",
+    "close": "关闭",
+    "resetGame": "重置游戏",
+    "resetConfirm": "确定要重置吗？所有进度将丢失。"
+  }
+}

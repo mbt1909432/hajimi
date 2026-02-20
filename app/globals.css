@@ -1,0 +1,650 @@
+@import "tailwindcss";
+
+/* ============================================
+   猫的低语 - 视觉小说设计系统
+   ============================================ */
+:root {
+  /* 基础色板 */
+  --bg-primary: #0a0a12;
+  --bg-secondary: #12121f;
+  --bg-glass: rgba(18, 18, 31, 0.85);
+  --foreground: #e8e8f0;
+
+  /* 情绪光谱 - 治愈线 */
+  --heal-primary: #c9a0dc;
+  --heal-secondary: #e8b4d9;
+  --heal-glow: rgba(201, 160, 220, 0.3);
+
+  /* 情绪光谱 - 堕落线 */
+  --dark-primary: #8b3a3a;
+  --dark-secondary: #5c2a2a;
+  --dark-glow: rgba(139, 58, 58, 0.3);
+
+  /* 中性色 */
+  --neutral-purple: #6b5b95;
+  --neutral-blue: #4a5568;
+
+  /* 功能色 */
+  --care: #63b3ed;
+  --affection: #f687b3;
+  --discipline: #f6e05e;
+  --dark-action: #fc8181;
+  --special: #b794f4;
+
+  /* 兼容旧变量 */
+  --background: var(--bg-primary);
+  --primary: var(--neutral-purple);
+  --secondary: var(--bg-secondary);
+  --accent: var(--heal-primary);
+  --danger: var(--dark-primary);
+  --success: #3a6b4a;
+  --pink: var(--heal-primary);
+  --purple: var(--neutral-purple);
+  --dark-purple: var(--bg-secondary);
+
+  /* Z-Index */
+  --z-base: 0;
+  --z-dialog: 10;
+  --z-modal: 20;
+  --z-overlay: 30;
+
+  /* 动画时长 */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+
+  /* 字体 */
+  --font-title: 'Playfair Display', 'Noto Serif SC', serif;
+  --font-body: 'Inter', 'Noto Sans SC', sans-serif;
+  --font-dialogue: 'Noto Sans SC', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Noto Sans SC', 'Segoe UI', sans-serif;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   猫咪动画 - 增强版
+   ============================================ */
+/* 呼吸待机 */
+@keyframes breathe {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.02) translateY(-5px); }
+}
+
+/* 开心摇摆 */
+@keyframes happy {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+/* 害怕颤抖 */
+@keyframes scared {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+/* 生病微弱 */
+@keyframes sick {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.cat-idle { animation: breathe 4s ease-in-out infinite; }
+.cat-happy { animation: happy 1s ease-in-out infinite; }
+.cat-scared { animation: scared 0.3s ease-in-out infinite; }
+.cat-sick { animation: sick 2s ease-in-out infinite; }
+
+/* ============================================
+   页面转场动画
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.page-transition {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-enter {
+  animation: modalIn 0.2s ease-out;
+}
+
+.number-pop {
+  animation: pop 0.3s ease;
+}
+.vn-container {
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* ============================================
+   角色区域
+   ============================================ */
+.character-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 15, 30, 0.9) 0%,
+    rgba(30, 25, 45, 0.7) 50%,
+    rgba(40, 35, 60, 0.9) 100%
+  );
+}
+
+.character-area::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(107, 91, 149, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(201, 160, 220, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ============================================
+   状态面板 - 侧边栏风格
+   ============================================ */
+.status-panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 200px;
+  background: rgba(30, 25, 45, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(155, 143, 194, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  z-index: var(--z-dialog);
+}
+
+/* ============================================
+   对话框风格
+   ============================================ */
+.dialog-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  min-height: 180px;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 15, 30, 0.95) 0%,
+    rgba(30, 25, 45, 0.98) 100%
+  );
+  border-top: 2px solid rgba(155, 143, 194, 0.3);
+  padding: 20px 24px;
+}
+
+.dialog-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(20, 15, 30, 0.8) 100%
+  );
+  transform: translateY(-100%);
+}
+
+/* ============================================
+   互动按钮 - 视觉小说风格
+   ============================================ */
+.vn-button {
+  position: relative;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--dark-purple) 100%);
+  border: 1px solid rgba(155, 143, 194, 0.3);
+  border-radius: 8px;
+  color: var(--foreground);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+  overflow: hidden;
+}
+
+.vn-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+  opacity: 0;
+  transition: opacity var(--duration-normal) ease;
+}
+
+.vn-button:hover::before {
+  opacity: 1;
+}
+
+.vn-button:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(107, 91, 149, 0.3);
+}
+
+.vn-button:active {
+  transform: translateY(0);
+}
+
+.vn-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.vn-button:disabled:hover::before {
+  opacity: 0;
+}
+
+.vn-button span {
+  position: relative;
+  z-index: 1;
+}
+
+/* 按钮类别颜色 */
+.vn-button--care {
+  border-color: rgba(100, 149, 237, 0.4);
+}
+.vn-button--care:hover {
+  border-color: rgba(100, 149, 237, 0.8);
+}
+
+.vn-button--affection {
+  border-color: rgba(201, 160, 220, 0.4);
+}
+.vn-button--affection:hover {
+  border-color: rgba(201, 160, 220, 0.8);
+}
+
+.vn-button--discipline {
+  border-color: rgba(210, 180, 140, 0.4);
+}
+.vn-button--discipline:hover {
+  border-color: rgba(210, 180, 140, 0.8);
+}
+
+.vn-button--dark {
+  border-color: rgba(180, 80, 80, 0.4);
+}
+.vn-button--dark:hover {
+  border-color: rgba(180, 80, 80, 0.8);
+}
+
+.vn-button--special {
+  border-color: rgba(160, 100, 200, 0.4);
+}
+.vn-button--special:hover {
+  border-color: rgba(160, 100, 200, 0.8);
+}
+
+/* ============================================
+   进度条样式
+   ============================================ */
+.vn-progress {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.vn-progress__bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width var(--duration-slow) ease-out;
+}
+
+.vn-progress__bar--affection {
+  background: linear-gradient(90deg, #c9a0dc 0%, #e8b8d0 100%);
+}
+
+.vn-progress__bar--corruption {
+  background: linear-gradient(90deg, #8b5a8b 0%, #a060a0 100%);
+}
+
+.vn-progress__bar--health {
+  background: linear-gradient(90deg, #5a9a6a 0%, #7aba8a 100%);
+}
+
+.vn-progress__bar--sanity {
+  background: linear-gradient(90deg, #5a7a9a 0%, #7a9aba 100%);
+}
+
+/* ============================================
+   时间推进按钮
+   ============================================ */
+.advance-button {
+  position: absolute;
+  bottom: 200px;
+  right: 20px;
+  padding: 10px 20px;
+  background: rgba(107, 91, 149, 0.6);
+  border: 1px solid rgba(155, 143, 194, 0.4);
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+  z-index: var(--z-dialog);
+}
+
+.advance-button:hover {
+  background: rgba(107, 91, 149, 0.9);
+  transform: scale(1.05);
+}
+
+/* ============================================
+   动画
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--duration-slow) ease-out forwards;
+}
+
+/* 猫咪动画 */
+@keyframes cat-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes cat-happy {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.02) rotate(-2deg); }
+  75% { transform: scale(1.02) rotate(2deg); }
+}
+
+@keyframes cat-scared {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+@keyframes cat-sick {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.98); }
+}
+
+.cat-idle { animation: cat-idle 3s ease-in-out infinite; }
+.cat-happy { animation: cat-happy 1s ease-in-out infinite; }
+.cat-scared { animation: cat-scared 0.3s ease-in-out infinite; }
+.cat-sick { animation: cat-sick 2s ease-in-out infinite; }
+
+/* ============================================
+   响应式适配
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .status-panel {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 0;
+    padding: 12px;
+  }
+
+  .character-area {
+    position: relative;
+    bottom: 0;
+    min-height: 200px;
+  }
+
+  .dialog-box {
+    position: relative;
+    min-height: auto;
+    padding: 16px;
+  }
+
+  .advance-button {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    margin: 10px auto;
+  }
+}
+
+/* ============================================
+   滚动条
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--purple);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* ============================================
+   选择字体
+   ============================================ */
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+/* ============================================
+   通用组件样式
+   ============================================ */
+
+/* 玻璃拟态卡片 */
+.dark-card,
+.glass-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(201, 160, 220, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* 状态面板 */
+.status-panel {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(201, 160, 220, 0.2);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* 按钮交互效果 */
+.btn-interact {
+  position: relative;
+  transition: all var(--duration-normal) ease;
+}
+
+.btn-interact:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(201, 160, 220, 0.3);
+}
+
+.btn-interact:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(201, 160, 220, 0.2);
+}
+
+/* 进度条动画 */
+.progress-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(200%); }
+}
+
+/* 数值条渐变 */
+.bar-heal { background: linear-gradient(90deg, var(--heal-primary), var(--heal-secondary)); }
+.bar-dark { background: linear-gradient(90deg, var(--dark-primary), var(--dark-secondary)); }
+.bar-health { background: linear-gradient(90deg, var(--care), #4299e1); }
+.bar-sanity { background: linear-gradient(90deg, var(--neutral-blue), #718096); }
+
+/* 模态框背景层 */
+.modal-backdrop {
+  z-index: var(--z-overlay);
+}
+
+/* 模态框内容 */
+.modal-content {
+  z-index: calc(var(--z-overlay) + 1);
+  animation: modalIn 0.2s ease-out;
+}
+
+/* 互动卡片 */
+.action-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.action-card.care {
+  border-color: rgba(99, 179, 237, 0.3);
+}
+
+.action-card.care:hover {
+  background: rgba(99, 179, 237, 0.1);
+  transform: translateY(-2px);
+}
+
+.action-card.affection {
+  border-color: rgba(246, 135, 179, 0.3);
+}
+
+.action-card.affection:hover {
+  background: rgba(246, 135, 179, 0.1);
+  transform: translateY(-2px);
+}
+
+.action-card.discipline {
+  border-color: rgba(246, 224, 94, 0.3);
+}
+
+.action-card.discipline:hover {
+  background: rgba(246, 224, 94, 0.1);
+  transform: translateY(-2px);
+}
+
+.action-card.dark {
+  border-color: rgba(252, 129, 129, 0.3);
+  background: rgba(139, 58, 58, 0.1);
+}
+
+.action-card.dark:hover {
+  background: rgba(139, 58, 58, 0.2);
+  box-shadow: 0 0 20px rgba(139, 58, 58, 0.3);
+}
+
+.action-card.special {
+  border-color: rgba(183, 148, 244, 0.3);
+}
+
+.action-card.special:hover {
+  background: rgba(183, 148, 244, 0.1);
+  transform: translateY(-2px);
+}
+
+/* 结局背景 */
+.ending-good {
+  background: radial-gradient(ellipse at center,
+    rgba(201, 160, 220, 0.2) 0%,
+    var(--bg-primary) 70%);
+}
+
+.ending-bad {
+  background: radial-gradient(ellipse at center,
+    rgba(139, 58, 58, 0.3) 0%,
+    var(--bg-primary) 70%);
+}
+
+.ending-secret {
+  background: radial-gradient(ellipse at center,
+    rgba(107, 91, 149, 0.4) 0%,
+    var(--bg-primary) 70%);
+}
+
+/* 标题字体 */
+.font-title {
+  font-family: var(--font-title);
+}
+
+/* 标题渐变 */
+.title-gradient {
+  background: linear-gradient(135deg, var(--heal-primary), var(--heal-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
